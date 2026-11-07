@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#07131f">
+  <meta name="description" content="An offline educational model of text-to-pump signals, a microfluidic logic maze, optical sensing, and byte output.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' blob: data:; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'none'; font-src 'self'; object-src 'none'; base-uri 'none';">
+  <title>Microfluidic Crypto-Engine | Lab Simulator</title>
+  <link rel="stylesheet" href="styles.css">
+  <script defer src="simulator.js"></script>
+  <script defer src="app.js"></script>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <a class="brand" href="#simulator" aria-label="Microfluidic Crypto-Engine home">
+        <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span>
+        <span class="brand-copy"><strong>FLOW / LOGIC LAB</strong><small>MICROFLUIDIC CRYPTO-ENGINE</small></span>
+      </a>
+      <div class="topbar-right">
+        <span class="offline-pill"><span class="live-dot"></span> OFFLINE SIMULATOR</span>
+        <span class="version-label">EDU MODEL 1.0</span>
+      </div>
+    </header>
+
+    <nav class="tabs" aria-label="Main navigation">
+      <button class="tab-button is-active" type="button" data-target="simulator" aria-current="page">01 &nbsp; Simulator</button>
+      <button class="tab-button" type="button" data-target="guide">02 &nbsp; How it works</button>
+      <button class="tab-button" type="button" data-target="limits">03 &nbsp; Model &amp; limits</button>
+    </nav>
+
+    <main>
+      <section id="simulator" class="page-section is-active" aria-labelledby="page-title">
+        <div class="hero-row">
+          <div>
+            <p class="eyebrow">DIGITAL INPUT → HYDRAULIC MODEL → SENSOR OUTPUT</p>
+            <h1 id="page-title">A fluid path for every bit.</h1>
+            <p class="hero-copy">Trace a short message through a conceptual pump, logic maze, and optical sensor. Watch the signal change at each stage.</p>
+          </div>
+          <div class="hero-stamp"><span>SIMULATION<br>ONLY</span><b>✳</b></div>
+        </div>
+
+        <div class="notice" role="note">
+          <span class="notice-icon" aria-hidden="true">!</span>
+          <p><strong>Educational model — not secure cryptography.</strong> No water, pump, sensor, or physical device is connected. The XOR demonstration is reversible and must not protect real data.</p>
+        </div>
+
+        <div class="workspace-grid">
+          <section class="panel input-panel" aria-labelledby="input-heading">
+            <div class="panel-heading">
+              <div><p class="section-kicker">STAGE 01 / ENCODE</p><h2 id="input-heading">Message input</h2></div>
+              <span class="step-number">01</span>
+            </div>
+            <label class="field-label" for="messageInput">Plaintext <span>UTF-8 · up to 96 bytes</span></label>
+            <textarea id="messageInput" rows="4" maxlength="96" spellcheck="false" aria-describedby="inputHelp">HELLO</textarea>
+            <div class="field-foot"><span id="inputHelp">Try a short message; spaces and symbols are supported.</span><span id="byteCount">5 / 96 B</span></div>
+            <label class="field-label key-label" for="keyInput">Demo key <span>repeats across bytes</span></label>
+            <div class="key-input-wrap"><span class="key-icon" aria-hidden="true">⌘</span><input id="keyInput" type="text" value="AQUA" maxlength="24" autocomplete="off" spellcheck="false" aria-label="Demonstration key"></div>
+            <div class="threshold-box">
+              <div class="threshold-heading"><label for="thresholdRange">Optical sensor threshold</label><output id="thresholdValue" for="thresholdRange">50</output></div>
+              <input id="thresholdRange" type="range" min="10" max="90" value="50" aria-label="Optical sensor threshold">
+              <div class="range-labels"><span>10 · sensitive</span><span>90 · strict</span></div>
+            </div>
+            <div class="action-row">
+              <button id="runButton" class="button button-primary" type="button"><span aria-hidden="true">▶</span> Run simulation</button>
+              <button id="exampleButton" class="button button-quiet" type="button">Load example</button>
+            </div>
+            <p id="inputError" class="error-text" role="alert" hidden></p>
+          </section>
+
+          <section class="panel output-panel" aria-labelledby="output-heading">
+            <div class="panel-heading">
+              <div><p class="section-kicker">STAGE 04 / READ</p><h2 id="output-heading">Sensor output</h2></div>
+              <span id="runStatus" class="status-chip">READY</span>
+            </div>
+            <div class="metrics-grid" aria-label="Simulation summary">
+              <div class="metric-card"><span class="metric-label">PUMP PULSES</span><strong id="metricPulses">—</strong><small>bit events</small></div>
+              <div class="metric-card"><span class="metric-label">AVG PRESSURE</span><strong id="metricPressure">—</strong><small>model kPa</small></div>
+              <div class="metric-card"><span class="metric-label">AND EVENTS</span><strong id="metricAnd">—</strong><small>diagnostic branch</small></div>
+              <div class="metric-card"><span class="metric-label">SENSOR ERRORS</span><strong id="metricErrors">—</strong><small>threshold misses</small></div>
+            </div>
+            <div class="output-block">
+              <div class="output-title"><span>READ BYTE STREAM</span><span id="outputFormat">HEX · 0 BYTES</span></div>
+              <pre id="hexOutput" class="hex-output" aria-live="polite">Run a simulation to read the sensor.</pre>
+            </div>
+            <div class="roundtrip-row"><span class="roundtrip-icon" aria-hidden="true">↺</span><div><strong id="roundtripTitle">Round-trip check</strong><small id="roundtripText">The sensed bytes can be XOR-decoded with the same demo key.</small></div><span id="roundtripBadge" class="roundtrip-badge">WAITING</span></div>
+            <div class="output-actions"><button id="exportButton" class="button button-small" type="button" disabled>Export run log (.json)</button><span class="muted-note">Local only · nothing is uploaded</span></div>
+          </section>
+        </div>
+
+        <section class="panel flow-panel" aria-labelledby="flow-heading">
+          <div class="panel-heading flow-heading">
+            <div><p class="section-kicker">LIVE MODEL / FLOW PATH</p><h2 id="flow-heading">From pump pulse to sensor reading</h2></div>
+            <span id="flowSummary" class="flow-summary">AWAITING INPUT</span>
+          </div>
+          <div id="flowDiagram" class="flow-diagram" aria-label="Model stages: text encoder, pump pulse, XOR logic maze with an AND diagnostic branch, and optical sensor">
+            <div class="flow-stage source-stage"><span class="stage-index">A</span><div class="source-glyph" aria-hidden="true"><span>01</span><span>10</span><span>11</span></div><strong>Text encoder</strong><small id="sourceValue">UTF-8 bytes</small></div>
+            <div class="flow-connector"><span class="connector-pulse"></span><span class="connector-caption">bitstream</span></div>
+            <div class="flow-stage pump-stage"><span class="stage-index">B</span><div class="pump-glyph" aria-hidden="true"><span class="pump-core"></span><span class="pump-wave"></span></div><strong>Pressure pump</strong><small id="pumpValue">18 / 32 kPa · model</small></div>
+            <div class="flow-connector"><span class="connector-pulse"></span><span class="connector-caption">modeled flow</span></div>
+            <div class="maze-stage">
+              <span class="stage-index">C</span><div class="maze-title">MICROFLUIDIC MAZE <span>LOGIC MODEL</span></div>
+              <svg class="maze-svg" viewBox="0 0 360 118" role="img" aria-label="Conceptual maze showing XOR main path and an AND diagnostic side branch">
+                <path class="maze-channel channel-base" d="M8 59 H72 Q90 59 90 38 V25 Q90 12 106 12 H143 Q160 12 160 29 V47 Q160 59 176 59 H203 Q219 59 219 43 V23 Q219 8 236 8 H269 Q286 8 286 25 V52 Q286 59 302 59 H352"/>
+                <path class="maze-channel channel-base" d="M104 59 V83 Q104 99 120 99 H147 Q162 99 162 82 V70"/>
+                <path class="maze-channel channel-base" d="M233 59 V83 Q233 99 249 99 H276 Q292 99 292 83 V68"/>
+                <path class="maze-channel channel-flow" d="M8 59 H72 Q90 59 90 38 V25 Q90 12 106 12 H143 Q160 12 160 29 V47 Q160 59 176 59 H203 Q219 59 219 43 V23 Q219 8 236 8 H269 Q286 8 286 25 V52 Q286 59 302 59 H352"/>
+                <circle class="maze-node input-node" cx="8" cy="59" r="5"/><circle class="maze-node gate-xor" cx="176" cy="59" r="13"/><circle class="maze-node gate-and" cx="147" cy="99" r="10"/><circle class="maze-node sensor-node" cx="352" cy="59" r="6"/>
+                <text class="maze-label" x="160" y="63">XOR</text><text class="maze-label" x="136" y="103">AND</text><text class="maze-label maze-small" x="5" y="83">INPUT</text><text class="maze-label maze-small" x="325" y="83">SENSE</text>
+                <circle class="flow-dot" cx="8" cy="59" r="3"/>
+              </svg>
+              <div class="maze-legend"><span><i class="legend-xor"></i> XOR output path</span><span><i class="legend-and"></i> AND diagnostic branch</span></div>
+            </div>
+            <div class="flow-connector"><span class="connector-pulse"></span><span class="connector-caption">light level</span></div>
+            <div class="flow-stage sensor-stage"><span class="stage-index">D</span><div class="sensor-glyph" aria-hidden="true"><span class="sensor-beam"></span><span class="sensor-pipe"></span><span class="sensor-eye"></span></div><strong>Optical sensor</strong><small id="sensorValue">Threshold 50 / 100</small></div>
+          </div>
+          <div class="flow-foot"><span><i class="legend-dot cyan"></i> Current run follows conceptual logic, not real fluid dynamics.</span><span id="simDuration">Model duration: —</span></div>
+        </section>
+
+        <section class="panel signal-panel" aria-labelledby="signal-heading">
+          <div class="panel-heading signal-heading">
+            <div><p class="section-kicker">STAGE 02–03 / TRANSFORM</p><h2 id="signal-heading">Bit-by-bit pump signal</h2></div>
+            <div class="signal-legend"><span><i class="signal-key low"></i> Bit 0 · 18 kPa / 80 ms</span><span><i class="signal-key high"></i> Bit 1 · 32 kPa / 150 ms</span></div>
+          </div>
+          <div id="signalStrip" class="signal-strip empty-strip"><p>Run a simulation to inspect the modeled pressure pulses.</p></div>
+          <div class="signal-caption"><span>Input bits drive pump pressure and pulse time.</span><span>Each column is one UTF-8 bit; color indicates pump input, not sensor output.</span></div>
+        </section>
+        <footer class="app-footer"><span>FLOW / LOGIC LAB · EDUCATIONAL SIMULATOR</span><span>All processing stays on this device.</span></footer>
+      </section>
+
+      <section id="guide" class="page-section" aria-labelledby="guide-title" hidden>
+        <div class="guide-header"><p class="eyebrow">FIELD NOTES / PROCESS</p><h1 id="guide-title">How the model works</h1><p>Follow one UTF-8 byte from text entry to a sensor-decoded byte stream.</p></div>
+        <div class="guide-grid">
+          <article class="guide-card"><span class="guide-number">01</span><p class="section-kicker">ENCODE</p><h2>Text becomes bits</h2><p>The message is encoded as UTF-8 bytes. Each byte is displayed as eight bits, most-significant bit first. The key is also encoded as UTF-8 and repeated to match the message length.</p><div class="mini-code">H → 01001000</div></article>
+          <article class="guide-card"><span class="guide-number">02</span><p class="section-kicker">DRIVE</p><h2>Bits become pump settings</h2><p>Each input bit selects a conceptual pulse: bit 0 maps to 18 kPa for 80 ms; bit 1 maps to 32 kPa for 150 ms. These are illustrative model values, not hardware specifications.</p><div class="mini-code">0 → 18 kPa · 80 ms<br>1 → 32 kPa · 150 ms</div></article>
+          <article class="guide-card"><span class="guide-number">03</span><p class="section-kicker">COMPUTE</p><h2>The maze applies logic</h2><p>The main path computes input bit XOR key bit. A side branch counts input AND key as a diagnostic. XOR produces a reversible teaching example; it is not a secure encryption algorithm.</p><div class="mini-code">cipher bit = input bit XOR key bit<br>AND branch = input bit AND key bit</div></article>
+          <article class="guide-card"><span class="guide-number">04</span><p class="section-kicker">READ</p><h2>A sensor thresholds the signal</h2><p>A modeled optical intensity is assigned to each XOR output: 24 for dry / 0 and 76 for wet / 1. The chosen threshold converts that level back into a bit. Raising it above 76 demonstrates sensor misreads.</p><div class="mini-code">intensity ≥ threshold → sensor bit 1</div></article>
+          <article class="guide-card guide-card-wide"><span class="guide-number">05</span><p class="section-kicker">DECODE</p><h2>The sensor bytes can be checked</h2><p>The displayed HEX stream is assembled from sensor bits. For an ideal threshold, XORing those bytes with the same repeated demo key reproduces the original UTF-8 message. If the sensor threshold causes bit errors, the round-trip check can fail or show replacement characters.</p><div class="mini-code">decoded byte = sensed byte XOR repeated key byte</div></article>
+        </div>
+        <div class="guide-note"><strong>What this app does not simulate:</strong> fluid flow, viscosity, channel geometry, pump dynamics, collisions, electrical PWM, photodiode response, or Navier–Stokes equations. The “maze” is a visual model of Boolean operations only.</div>
+      </section>
+
+      <section id="limits" class="page-section" aria-labelledby="limits-title" hidden>
+        <div class="guide-header"><p class="eyebrow">READ BEFORE USE</p><h1 id="limits-title">Model boundaries &amp; safety</h1><p>This project is software for learning and demonstration only.</p></div>
+        <div class="limits-layout">
+          <article class="limits-callout"><span class="limits-icon">!</span><div><p class="section-kicker">IMPORTANT</p><h2>Not a real crypto system</h2><p>The “cipher” here is repeated-key XOR. It is deterministic, trivially reversible, and unsuitable for confidentiality, authentication, or protecting any data. Never enter secrets, passwords, personal records, or production data.</p></div></article>
+          <div class="limits-list">
+            <article><span>01</span><div><h3>No physical hardware</h3><p>The app controls no pump, valve, laser, photodiode, circuit, or microfluidic chip. Pressure, pulse duration, optical intensity, and duration are illustrative values generated in software.</p></div></article>
+            <article><span>02</span><div><h3>No fluid solver</h3><p>The logic maze does not calculate fluid mechanics or solve Navier–Stokes equations. It models bitwise XOR and AND, then maps the result to simple sensor values.</p></div></article>
+            <article><span>03</span><div><h3>Threshold artifacts are artificial</h3><p>Sensor errors are created only by moving the threshold outside the modeled dry/wet intensity levels. This is not a calibrated optical or electrical sensor model.</p></div></article>
+            <article><span>04</span><div><h3>Local and offline</h3><p>Inputs and run logs stay in the app on this device. Exporting creates a JSON file in the browser or app's normal download/share location; it is not uploaded.</p></div></article>
+            <article><span>05</span><div><h3>Educational use only</h3><p>Use the simulator to explore bit encoding, simple Boolean logic, thresholds, and signal visualization. Do not use it to guide hardware construction, safety decisions, or security design.</p></div></article>
+          </div>
+          <div class="limits-footer"><span class="live-dot"></span><span>SAFE MODE: SOFTWARE-ONLY DEMONSTRATION</span></div>
+        </div>
+      </section>
+    </main>
+  </div>
+</body>
+</html>
